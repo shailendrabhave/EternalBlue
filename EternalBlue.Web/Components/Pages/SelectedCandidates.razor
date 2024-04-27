@@ -1,0 +1,30 @@
+﻿@page "/selectedCandidates"
+@inherits SelectedCandidatesBase
+@using EternalBlue.Web.ViewModels
+
+<PageTitle>Selected Candidates</PageTitle>
+<div>
+    <Grid @ref="grid"
+          TItem="CandidateViewModel"
+          Class="table table-hover table-bordered table-striped"
+          DataProvider="SelectedCandidatesDataProvider"
+          AllowFiltering="true"
+          Responsive="true">
+
+        <GridColumn TItem="CandidateViewModel" HeaderText="" PropertyName="" Sortable="false" Filterable="false" TextAlignment="Alignment.Center">
+            <img class="img-list-item" src="@context.ProfilePicture">
+        </GridColumn>        
+        <GridColumn TItem="CandidateViewModel" HeaderText="Candidate Name" PropertyName="FullName">
+            @context.FullName
+        </GridColumn>
+        <GridColumn TItem="CandidateViewModel" HeaderText="Email" PropertyName="Email">
+            @context.Email
+        </GridColumn>
+        <GridColumn TItem="CandidateViewModel" HeaderText="Experience" PropertyName="" Sortable="false" Filterable="false">
+            @foreach (var experience in context.Experience)
+            {
+                <Badge Color="BadgeColor.Info" IndicatorType="BadgeIndicatorType.RoundedPill"  Class="m-1 p-2">@experience</Badge>
+            }
+        </GridColumn>
+    </Grid>
+</div>

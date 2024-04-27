@@ -10,6 +10,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddTransient<ITechnologyService, TechnologyService>();
 builder.Services.AddTransient<ICandidateService, CandidateService>();
 builder.Services.AddSingleton<ApplicationState>();
+builder.Services.AddBlazorBootstrap();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 

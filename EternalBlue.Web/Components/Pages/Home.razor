@@ -1,22 +1,97 @@
 ﻿@page "/"
 @inherits HomeBase
-
 <PageTitle>Home</PageTitle>
 
-@if(Candidate != null){
-    <h2>@Candidate.FirstName</h2>
-
-    <ul>
-    @foreach (var experience in Candidate.Experience)
-    {
-        <li><span>@experience.TechnologyId</span><span>(@experience.YearsOfExperience)</span></li>
-    }
-    </ul>
-}
-
-
-<button class="btn btn-primary" @onclick="FilterCandidate">Filter Candidate</button>
-
-<button class="btn btn-primary" @onclick="GetCandidate">Get Candidate</button>
-
-<button class="btn btn-primary" @onclick="UpdateCandidate">Update Candidate</button>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <div class="card mt-3 px-2 pt-2">                    
+                <div class="px-3 mb-3">
+                    <label for="mslct" class="form-label">Select Technology:</label>
+                    @if (Technologies != null){
+                        <select class="form-control" title="Select Technology" @bind="@SelectedTechnologyId">
+                            <option value="@Guid.Empty">Select Technology </option>
+                             @foreach (var option in Technologies)
+                            {
+                                <option value="@option.Guid">@option.Name</option>
+                            }
+                        </select>
+                    }                    
+                </div>
+                <div class="px-3 mb-3">
+                    <label for="mslct" class="form-label">Select Years of Experience:</label>
+                    <div class="d-flex flex-row mb-3">
+                       <input type="number" class="form-control" min="1" max="60" @bind-value="@SelectedYearsOfExperience" />
+                    </div>
+                </div>
+                <div class="px-3 pb-2 text-end">
+                    <Button Color="ButtonColor.Primary" Class="ps-3 pe-3 me-3" @onclick="AddExperienceFilter">
+                        Add Filter
+                    </Button>
+                    <Button Color="ButtonColor.Secondary" Class="ps-3 pe-3" @onclick="ClearFilter">
+                        Clear
+                    </Button>
+                </div>
+                <div class="px-3 mb-3">
+                    <div class="card-body">
+                        @if(ErrorMessages.Count == 0 && SelectedExperienceList.Count == 0){
+                            <div class="text-center">No filters applied</div>
+                        }
+                        <ul>
+                            @foreach(var errorMessage in ErrorMessages){
+                                <li><span class="small text-danger">@errorMessage</span></li>
+                            }
+                        </ul>
+                        @foreach (var experience in SelectedExperienceList)
+                        {
+                            <Button Color="ButtonColor.Info" Class="me-2 p-2" @onclick="(() => RemoveExperience(experience.TechnologyId))">
+                                @experience.Description 
+                                <Icon Name="IconName.XCircleFill" Class="m-1" />
+                            </Button>
+                        }
+                    </div>
+                </div>                
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-3">
+        @if (Candidate != null)
+        {
+            <div class="col-6">
+                <div class="card mb-3">
+                    <div class="row no-gutters">
+                        <div class="col-md-4">
+                            <img src="@Candidate.ProfilePicture" class="card-img-top" style="height:200px">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">@Candidate.FullName</h5>
+                                <p class="card-text">@Candidate.Email</p>
+                            </div>
+                            <div class="card-body">
+                                @foreach (var experience in Candidate.Experience)
+                                {
+                                    <Badge Color="BadgeColor.Info" IndicatorType="BadgeIndicatorType.RoundedPill" Class="m-1 p-2">@experience</Badge>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <Button Color="ButtonColor.Success" Class="ps-3 pe-3 me-3" @onclick="(() => SetCandidateStatus(true))">
+                        <Icon Name="IconName.CheckCircleFill" Class="m-1" />Accept
+                    </Button>
+                    <Button Color="ButtonColor.Danger" Class="ps-3 pe-3 me-5" @onclick="(() => SetCandidateStatus(false))">
+                        <Icon Name="IconName.XCircleFill" Class="m-1" />Reject
+                    </Button>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="text-center">
+                No candidates available
+            </div>
+        }
+    </div>
+</div>
