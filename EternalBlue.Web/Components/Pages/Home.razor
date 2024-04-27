@@ -1,0 +1,22 @@
+﻿@page "/"
+@inherits HomeBase
+
+<PageTitle>Home</PageTitle>
+
+@if(Candidate != null){
+    <h2>@Candidate.FirstName</h2>
+
+    <ul>
+    @foreach (var experience in Candidate.Experience)
+    {
+        <li><span>@experience.TechnologyId</span><span>(@experience.YearsOfExperience)</span></li>
+    }
+    </ul>
+}
+
+
+<button class="btn btn-primary" @onclick="FilterCandidate">Filter Candidate</button>
+
+<button class="btn btn-primary" @onclick="GetCandidate">Get Candidate</button>
+
+<button class="btn btn-primary" @onclick="UpdateCandidate">Update Candidate</button>
